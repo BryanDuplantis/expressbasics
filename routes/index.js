@@ -15,7 +15,7 @@ router.get('/awesomethings', function (req, res) {
       'Love',
       'Truth',
       'Beauty',
-      'Family'
+      'Family',
     ];
 
     res.render('templates/world',
