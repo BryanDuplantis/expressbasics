@@ -1,5 +1,10 @@
+var fs = require('fs');
+
 var express = require('express'); // require Express
 var lessCSS = require('less-middleware');
+var morgan = require('morgan');
+var loggly = require('loggly');
+
 
 var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
@@ -14,10 +19,31 @@ app.locals.title = 'aweso.me';
 // middlewares
 app.use(lessCSS('public'));
 
-app.use(function (req, res, next) {
-  console.log('Request at ' + new Date().toISOString());
+var logStream = fs.createWriteStream('access.log', {flags: 'a'});
+//output to access.log file in Apache format
+app.use(morgan('combined', {stream: logStream}));
+//output to console in Dev format
+app.use(morgan('dev'));
+
+var client = loggly.createClient({
+  token: '4f8af67e-dbee-44e2-9e41-a785f6edfadf',
+  subdomain: 'BryanDuplantis',
+  tags: ['NodeJS'],
+  json: true
+});
+
+app.use(function(err, req, res, next) {
+  client.log({
+    ip: req.ip,
+    date: new Date(),
+    url: req.url,
+    status: res.statusCode,
+    method: req.method,
+    err: err
+  });
   next();
 });
+
 app.use(express.static('public'));
 
 // routes
