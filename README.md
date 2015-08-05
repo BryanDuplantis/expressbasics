@@ -1,6 +1,6 @@
 # expressbasics
 
-<snippet>
+<!-- <snippet>
   <content><![CDATA[
 # ${1:Express Basics App}
 Node.js + Express app demostrating routes, middlewares
@@ -18,11 +18,11 @@ TODO: Describe the installation process
 5. Submit a pull request :D
 <!-- ## History
 TODO: Write history -->
-## Credits
+<!-- ## Credits
 Nashville Software School Project
 Bryan Duplantis <duplantis@gmail.com>
 ## License
 MIT
 ]]></content>
   <tabTrigger>readme</tabTrigger>
-</snippet>
+</snippet> --> -->
