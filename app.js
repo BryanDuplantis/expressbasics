@@ -13,6 +13,7 @@ var imgur = require('./routes/imgur');
 var app = express();
 
 require('./lib/secrets');
+require('./lib/mongodb');
 
 app.set('view engine', 'ejs');
 app.set('case sensitive routing', true);

@@ -10,21 +10,16 @@ router.get(/hello/, function (req, res) {
 });
 
 router.get('/awesomethings', function (req, res) {
-  setTimeout(function () {
-    var awesomeThings = [
-      'Love',
-      'Truth',
-      'Beauty',
-      'Family',
-    ];
+  var collection = global.db.collection('awesomeThings');
 
+  collection.find().toArray(function(err, things) {
     res.render('templates/world',
       {
-        welcome: 'Thanks for coming!',
-        awesomeThings: awesomeThings
+        welcome: 'Thanks for coming',
+        awesomeThings: things
       }
     );
-  }, 5000);
+  });
 });
 
 router.get('/test', function (req, res, next) {
