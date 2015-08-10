@@ -1,3 +1,4 @@
+console.log(process.env);
 var fs = require('fs');
 
 var express = require('express');
@@ -70,7 +71,9 @@ app.use(function (err, req, res, next) {
   res.status(500).send('My Bad');
 });
 
-var server = app.listen(3000, function () {
+var port = process.env.PORT || 2000;
+
+var server = app.listen(port, function () {
   var host = server.address().address;
   var port = server.address().port;
 
