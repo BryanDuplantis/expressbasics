@@ -10,10 +10,15 @@ var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
 var chickennuggets = require('./routes/chickennuggets');
 var imgur = require('./routes/imgur');
+//user authentication
+var user = require('./routes/user');
 
 var app = express();
 
-require('./lib/secrets');
+if (process.env.NODE_ENV !== 'production') {
+  require('./lib/secrets');
+}
+
 require('./lib/mongodb');
 
 app.set('view engine', 'ejs');
@@ -28,27 +33,27 @@ var logStream = fs.createWriteStream('access.log', {flags: 'a'});
 app.use(morgan('combined', {stream: logStream}));
 app.use(morgan('dev'));
 
-app.use(function (req, res, next) {
-  var client = require('./lib/loggly')('incoming');
+// app.use(function (req, res, next) {
+//   var client = require('./lib/loggly')('incoming');
 
-  client.log({
-    ip: req.ip,
-    date: new Date(),
-    url: req.url,
-    status: res.statusCode,
-    method: req.method
-  });
-  next();
-});
+//   client.log({
+//     ip: req.ip,
+//     date: new Date(),
+//     url: req.url,
+//     status: res.statusCode,
+//     method: req.method
+//   });
+//   next();
+// });
 
 app.use(express.static('public'));
-
-
 
 app.use('/', routes);
 app.use('/pizza', pizza);
 app.use('/chickennuggets', chickennuggets);
 app.use('/imgur', imgur);
+///user authentication
+app.use('/user', user);
 
 app.use(function (req, res) {
   res.status(403).send('Unauthorized!');

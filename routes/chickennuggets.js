@@ -1,25 +1,19 @@
 var express = require('express');
-var moment = require('moment');
+// var moment = require('moment');
 var ObjectID = require('mongodb').ObjectID;
+
+var Order = require('../models/ChickenNuggets');
 
 var router = express.Router();
 
+
+// Angular Services: use constructors
+// Angular Factories: return simple objects without inheritance
+
 router.get('/', function (req, res) {
-  var collection = global.db.collection('chickenNuggets');
-
-  collection.find().toArray(function (err, orders) {
-    var formattedOrders = orders.map(function (order) {
-      return {
-        _id:       order._id,
-        name:      order.name,
-        flavor:    order.style,
-        qty:       order.qty,
-        createdAt: moment(order._id.getTimestamp()).fromNow()
-      };
+  Order.findAll(function (err, orders) {
+      res.render('templates/chicken-index', {orders: orders});
     });
-
-    res.render('templates/chicken-index', {orders: formattedOrders});
-  });
 });
 
 router.get('/order', function (req, res) {
