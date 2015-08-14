@@ -1,10 +1,10 @@
-console.log(process.env);
 var fs = require('fs');
 
 var express = require('express');
 var lessCSS = require('less-middleware');
 var morgan = require('morgan');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var session = require('express-session')
 
 var routes = require('./routes/index');
 var pizza = require('./routes/pizza');
@@ -25,6 +25,12 @@ app.set('view engine', 'ejs');
 app.set('case sensitive routing', true);
 
 app.locals.title = 'aweso.me';
+
+app.use(session({
+  secret: 'expressbasicsisareallyawesomeapp',
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(lessCSS('public'));
@@ -48,12 +54,22 @@ app.use(morgan('dev'));
 
 app.use(express.static('public'));
 
+///user authentication
+app.use('/user', user);
 app.use('/', routes);
+app.use(express.static('www'));
+
+app.use(function requireAuth (req, res, next) {
+    if (req.session.userID) {
+      next();
+    } else {
+      res.redirect('/user/login')
+    }
+});
+
 app.use('/pizza', pizza);
 app.use('/chickennuggets', chickennuggets);
 app.use('/imgur', imgur);
-///user authentication
-app.use('/user', user);
 
 app.use(function (req, res) {
   res.status(403).send('Unauthorized!');
