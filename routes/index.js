@@ -12,11 +12,11 @@ router.get(/hello/, function (req, res) {
 router.get('/awesomethings', function (req, res) {
   var collection = global.db.collection('awesomeThings');
 
-  collection.find().toArray(function(err, things) {
+  collection.find().toArray(function(err, awesomeThings) {
     res.render('templates/world',
       {
-        welcome: 'Thanks for coming',
-        awesomeThings: things
+        welcome: 'Thanks for coming!',
+        awesomeThings: awesomeThings
       }
     );
   });
